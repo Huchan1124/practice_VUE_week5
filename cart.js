@@ -129,7 +129,7 @@ const app = Vue.createApp({
         isPhone(value) {
             const phoneNumber = /^(09)[0-9]{8}$/;
 
-            if(value === undefined ){
+            if(value === '' ){
                 return '手機號碼 為必填';
             }
 
