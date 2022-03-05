@@ -27,6 +27,35 @@ const app = createApp({
             this.productId = id;
             this.$refs.productModal.openModal()
         },
+        getCart(){
+            axios.get(`${apiUrl}/api/${apiPath}/cart`)
+            .then((res) => {
+                // console.log(res)
+              this.cartData = res.data.data;
+            })
+            .catch((error) => {
+    
+            })
+
+        },
+        addToCart(id,qty = 1){
+            const postData = {
+                "data": {
+                  "product_id": id,
+                  qty,
+                }
+              };
+
+            axios.post(`${apiUrl}/api/${apiPath}/cart`, postData)
+            .then((res) => {
+                console.log(res)
+            //   this.cartData = res.data.data;
+            })
+            .catch((error) => {
+    
+            })
+
+        }
 
    
 
@@ -35,7 +64,8 @@ const app = createApp({
     },
     mounted() {
 
-        this.getProducts()
+        this.getProducts();
+        this.getCart();
         
     },
 });

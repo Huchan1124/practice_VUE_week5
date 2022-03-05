@@ -50,7 +50,7 @@
                                         @click="openProductModal(product.id)">
                                         查看更多
                                     </button>
-                                    <button type="button" class="btn btn-danger">
+                                    <button type="button" class="btn btn-danger" @click="addToCart(product.id)">
                                         <span class=""></span>
                                         加到購物車
                                     </button>
@@ -63,6 +63,9 @@
                     <button class="btn btn-outline-danger" type="button">
                         清空購物車
                     </button>
+                </div>
+                <div>
+                    {{cartData}}
                 </div>
                 <!-- 購物車列表 -->
                 <table class="table align-middle">
