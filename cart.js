@@ -119,6 +119,7 @@ const app = Vue.createApp({
                console.log(res)
                this.$refs.form.resetForm()
                this.isLoadingItem = '';
+               this.getCart();
                
            })
            .catch((error) => {
