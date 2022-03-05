@@ -73,7 +73,7 @@
                             <th></th>
                             <th>品名</th>
                             <th style="width: 150px">數量/單位</th>
-                            <th class="text-end">單價</th>
+                            <th class="text-end">價格</th>
                         </tr>
                     </thead>
 
@@ -81,7 +81,8 @@
                         <template v-if="cartData.carts">
                             <tr v-for="cartItem in cartData.carts " :key="cartItem.id">
                                 <td>
-                                    <button type="button" class="btn btn-outline-danger btn-sm" @click="removeCartItem(cartItem.id)">
+                                    <button type="button" class="btn btn-outline-danger btn-sm"
+                                        @click="removeCartItem(cartItem.id)">
                                         x
                                     </button>
                                 </td>
@@ -91,17 +92,17 @@
                                 <td>
                                     <div class="input-group input-group-sm">
                                         <div class="input-group mb-3">
-                                            <select id="" class="form-select">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
+                                            <select id="" class="form-select" v-model="cartItem.qty" :disabled=" isLoadingItem ==  cartItem.id" @change="updateCartItem(cartItem)">
+                                                <option :value="num" v-for="num in 10" :key="`${num}${cartItem.id}`">
+                                                    {{num}}</option>
                                             </select>
-                                            <span class="input-group-text" id="basic-addon2">{{cartItem.product.unit}}</span>
+                                            <span class="input-group-text"
+                                                id="basic-addon2">{{cartItem.product.unit}}</span>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="text-end">
-                                    {{cartItem.product.price}}
+                                    {{cartItem.qty * cartItem.product.price}}
                                 </td>
                             </tr>
                         </template>

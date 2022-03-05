@@ -54,9 +54,7 @@ const app = createApp({
                 this.getCart();
             })
             .catch((error) => {
-    
             })
-
         },
         removeCartItem(id){
 
@@ -68,9 +66,27 @@ const app = createApp({
                 this.isLoadingItem = '';
             })
             .catch((error) => {
-    
             })
+        },
+        updateCartItem(cartItem){
+            
+            const postData = {
+                "data": {
+                  "product_id": cartItem.id,
+                  "qty": cartItem.qty,
+                }
+              };
 
+            this.isLoadingItem = cartItem.id;
+
+            axios.put(`${apiUrl}/api/${apiPath}/cart/${cartItem.id}`, postData)
+            .then((res) => {
+                console.log(res)
+                this.isLoadingItem = '';
+                this.getCart();
+            })
+            .catch((error) => {
+            })
 
         },
 
