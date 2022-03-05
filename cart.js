@@ -21,7 +21,6 @@ const app = createApp({
               this.products = res.data.products;
             })
             .catch((error) => {
-    
             })
         },
         openProductModal(id){
@@ -34,7 +33,6 @@ const app = createApp({
               this.cartData = res.data.data;
             })
             .catch((error) => {
-    
             })
 
         },
@@ -50,8 +48,9 @@ const app = createApp({
 
             axios.post(`${apiUrl}/api/${apiPath}/cart`, postData)
             .then((res) => {
-                this.isLoadingItem = '';
                 this.getCart();
+                this.$refs.productModal.closeModal()
+                this.isLoadingItem = '';
             })
             .catch((error) => {
             })
@@ -59,14 +58,16 @@ const app = createApp({
         removeCartItem(id){
 
             this.isLoadingItem = id;
-
-            axios.delete(`${apiUrl}/api/${apiPath}/cart/${id}`)
-            .then((res) => {
-                this.getCart();
-                this.isLoadingItem = '';
-            })
-            .catch((error) => {
-            })
+            if(confirm("確定要移除品項?")){
+                axios.delete(`${apiUrl}/api/${apiPath}/cart/${id}`)
+                .then((res) => {
+                    this.getCart();
+                    this.isLoadingItem = '';
+                })
+                .catch((error) => {
+                })
+            }
+         
         },
         updateCartItem(cartItem){
             
@@ -81,13 +82,23 @@ const app = createApp({
 
             axios.put(`${apiUrl}/api/${apiPath}/cart/${cartItem.id}`, postData)
             .then((res) => {
-                console.log(res)
                 this.isLoadingItem = '';
                 this.getCart();
             })
             .catch((error) => {
             })
 
+        },
+        removeAllCart(){
+            if(confirm("確定要清空購物車?")){
+                axios.delete(`${apiUrl}/api/${apiPath}/carts`)
+                .then((res) => {
+                    this.getCart();
+                })
+                .catch((error) => {
+                })
+            }
+         
         },
 
    
@@ -131,14 +142,19 @@ app.component('product-modal',{
         getProduct(){
             axios.get(`${apiUrl}/api/${apiPath}/product/${this.id}`)
             .then((res) => {
-                console.log(res.data.product)
               this.product = res.data.product;
               
             })
             .catch((error) => {
     
             })
-        }
+        },
+        addToCart(){
+          this.$emit('add-cart',this.product.id,this.qty);
+          setTimeout(() =>
+           { this.qty = 1;}, 1000);
+         
+        },
     },
     mounted(){
       this.modal = new bootstrap.Modal(this.$refs.modal);
