@@ -27,7 +27,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for='product in products'>
+                        <tr v-for='product in products' :key="product.id">
                             <td style="width: 200px">
                                 <div :style="{ backgroundImage: `url(${product.imageUrl})`}" style="height:100px;
                                   background-size: cover;
@@ -47,11 +47,13 @@
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <button type="button" class="btn btn-outline-secondary"
-                                        @click="openProductModal(product.id)">
+                                        @click="openProductModal(product.id)" :disabled=" isLoadingItem == product.id">
                                         查看更多
                                     </button>
-                                    <button type="button" class="btn btn-danger" @click="addToCart(product.id)">
-                                        <span class=""></span>
+                                    <button type="button" class="btn btn-danger" @click="addToCart(product.id)"
+                                        :disabled=" isLoadingItem ==  product.id">
+                                        <span class="spinner-border spinner-border-sm"
+                                            v-show="isLoadingItem == product.id"></span>
                                         加到購物車
                                     </button>
                                 </div>
@@ -64,9 +66,6 @@
                         清空購物車
                     </button>
                 </div>
-                <div>
-                    {{cartData}}
-                </div>
                 <!-- 購物車列表 -->
                 <table class="table align-middle">
                     <thead>
@@ -77,37 +76,40 @@
                             <th class="text-end">單價</th>
                         </tr>
                     </thead>
+
                     <tbody>
-                        <tr>
-                            <td>
-                                <button type="button" class="btn btn-outline-danger btn-sm">
-                                    x
-                                </button>
-                            </td>
-                            <td>
-                                產品名稱
-                            </td>
-                            <td>
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group mb-3">
-                                        <select id="" class="form-select">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                        </select>
-                                        <span class="input-group-text" id="basic-addon2">個</span>
+                        <template v-if="cartData.carts">
+                            <tr v-for="cartItem in cartData.carts " :key="cartItem.id">
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" @click="removeCartItem(cartItem.id)">
+                                        x
+                                    </button>
+                                </td>
+                                <td>
+                                    {{cartItem.product.title}}
+                                </td>
+                                <td>
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group mb-3">
+                                            <select id="" class="form-select">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                            </select>
+                                            <span class="input-group-text" id="basic-addon2">{{cartItem.product.unit}}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="text-end">
-                                200
-                            </td>
-                        </tr>
+                                </td>
+                                <td class="text-end">
+                                    {{cartItem.product.price}}
+                                </td>
+                            </tr>
+                        </template>
                     </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="3" class="text-end">總計</td>
-                            <td class="text-end">1000</td>
+                            <td class="text-end">{{cartData.final_total}}</td>
                         </tr>
                     </tfoot>
                 </table>

@@ -11,6 +11,7 @@ const app = createApp({
             products:[],
             cartData:{},
             productId: '',
+            isLoadingItem:'',
         }
     },
     methods:{
@@ -30,7 +31,6 @@ const app = createApp({
         getCart(){
             axios.get(`${apiUrl}/api/${apiPath}/cart`)
             .then((res) => {
-                // console.log(res)
               this.cartData = res.data.data;
             })
             .catch((error) => {
@@ -46,16 +46,33 @@ const app = createApp({
                 }
               };
 
+            this.isLoadingItem = id;
+
             axios.post(`${apiUrl}/api/${apiPath}/cart`, postData)
             .then((res) => {
-                console.log(res)
-            //   this.cartData = res.data.data;
+                this.isLoadingItem = '';
+                this.getCart();
             })
             .catch((error) => {
     
             })
 
-        }
+        },
+        removeCartItem(id){
+
+            this.isLoadingItem = id;
+
+            axios.delete(`${apiUrl}/api/${apiPath}/cart/${id}`)
+            .then((res) => {
+                this.getCart();
+                this.isLoadingItem = '';
+            })
+            .catch((error) => {
+    
+            })
+
+
+        },
 
    
 
